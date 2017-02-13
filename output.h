@@ -1,0 +1,12 @@
+#pragma once
+#include "third-party/cjson/cJSON.h"
+#include "third-party/sqlite/sqlite3.h"
+#include "database.h"
+#include "types.h"
+#include <stdio.h>
+#include <string.h>
+void output_student_data();
+void output_student_with_sql();
+void display_sort_menu();
+void display_delete_menu();
+void display_stat();

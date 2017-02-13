@@ -1,0 +1,25 @@
+[
+  {
+    "id": "03",
+    "name": "数学与计算机科学学院",
+    "disciplines": [
+      {
+        "id": "1",
+        "name": "计算机",
+        "learn_year": 4,
+        "training_level": "本科"
+      }
+    ]
+  }, {
+    "id": "22",
+    "name": "软件学院",
+    "disciplines": [
+      {
+        "id": "0",
+        "name": "软件工程",
+        "learn_year": 4,
+        "training_level": "本科"
+      }
+    ]
+  }
+]

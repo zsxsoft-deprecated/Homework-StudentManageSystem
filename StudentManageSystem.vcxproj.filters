@@ -1,0 +1,30 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <ClCompile Include="dateHelper.c" />
+    <ClCompile Include="manage.c" />
+    <ClCompile Include="menu.c" />
+    <ClCompile Include="stdafx.c" />
+    <ClCompile Include="validator.c" />
+    <ClCompile Include="third-party\cjson\cJSON.c" />
+    <ClCompile Include="database.c" />
+    <ClCompile Include="third-party\sqlite\sqlite3.c" />
+    <ClCompile Include="loader.c" />
+    <ClCompile Include="utils.c" />
+    <ClCompile Include="output.c" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="dateHelper.h" />
+    <ClInclude Include="menu.h" />
+    <ClInclude Include="stdafx.h" />
+    <ClInclude Include="targetver.h" />
+    <ClInclude Include="validator.h" />
+    <ClInclude Include="third-party\cjson\cJSON.h" />
+    <ClInclude Include="types.h" />
+    <ClInclude Include="database.h" />
+    <ClInclude Include="third-party\sqlite\sqlite3.h" />
+    <ClInclude Include="loader.h" />
+    <ClInclude Include="utils.h" />
+    <ClInclude Include="output.h" />
+  </ItemGroup>
+</Project>
