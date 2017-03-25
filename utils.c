@@ -6,7 +6,7 @@
 
 time_t get_unix_timestamp(int y, int m, int d) {
 	struct tm tm;
-	time_t timestamp = 0;
+	time_t timestamp;
 	tm.tm_year = y - 1900;
 	tm.tm_mon = m - 1;
 	tm.tm_mday = d;
@@ -20,8 +20,8 @@ time_t get_unix_timestamp(int y, int m, int d) {
 
 int utf8_to_gbk(unsigned char * utf8_str, unsigned char * gbk_str)
 {
-	wchar_t * unicode_str = NULL;
-	int ret = 0;
+	wchar_t * unicode_str;
+	int ret;
 	if (!utf8_str) return 0;
 	ret = MultiByteToWideChar(CP_UTF8, 0, (char *)utf8_str, -1, NULL, (int)NULL);
 	unicode_str = malloc(sizeof(wchar_t) * (ret + 1));
@@ -42,8 +42,8 @@ int utf8_to_gbk(unsigned char * utf8_str, unsigned char * gbk_str)
 }
 
 int gbk_to_utf8(unsigned char *gbk_str, unsigned char *utf8_str, int utf8_len) {
-	wchar_t * unicode_str = NULL;
-	int ret = 0;
+	wchar_t * unicode_str;
+	int ret;
 	if (!gbk_str) return 0;
 	ret = MultiByteToWideChar(CP_ACP, 0, (char *)gbk_str, -1, NULL, (int)NULL);
 	unicode_str = malloc(sizeof(wchar_t) * (ret + 1));

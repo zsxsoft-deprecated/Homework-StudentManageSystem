@@ -65,6 +65,7 @@ int colleges_length = 0;
 EXPORT_ARRAY_FUNCTION(admission, admissions)
 EXPORT_ARRAY_FUNCTION(nation, nations)
 EXPORT_ARRAY_FUNCTION(source, sources)
+EXPORT_ARRAY_FUNCTION(instructor, instructors)
 
 EXPORT_OBJECT_FUNCTION(nationality, nationalities)
 EXPORT_OBJECT_FUNCTION(political_status, political_statuses)
@@ -95,6 +96,7 @@ void types_constructor(void) {
 	READ_ARRAY_JSON(sources, "sources");
 	READ_OBJECT_JSON(nationalities, "nationalities");
 	READ_OBJECT_JSON(political_statuses, "political_status");
+	READ_OBJECT_JSON(instructors, "instructor");
 }
 
 void types_destructor(void) {
@@ -104,6 +106,7 @@ void types_destructor(void) {
 	cJSON_Delete(nations);
 	cJSON_Delete(sources);
 	cJSON_Delete(political_statuses);
+	cJSON_Delete(instructors);
 }
 
 

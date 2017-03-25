@@ -12,6 +12,7 @@
 
 void types_constructor(void);
 void types_destructor(void);
+EXPORT_ARRAY_FUNCTION(instructor, instructors)
 EXPORT_ARRAY_FUNCTION(admission, admissions)
 EXPORT_OBJECT_FUNCTION(nationality, nationalities)
 EXPORT_ARRAY_FUNCTION(nation, nations)
