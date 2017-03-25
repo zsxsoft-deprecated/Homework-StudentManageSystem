@@ -1,11 +1,11 @@
-ï»¿#include "stdafx.h"
+#include "stdafx.h"
 #include "third-party\sqlite\sqlite3.h"
 
 sqlite3 *db;
 void database_constructor() {
 	int rc = sqlite3_open_v2("./data/data.db", &db, SQLITE_OPEN_READWRITE | SQLITE_OPEN_CREATE, NULL);
 	if (rc != SQLITE_OK) {
-		printf("SQLiteé”™è¯¯ï¼š%dï¼Œæ— æ³•åˆå§‹åŒ–ç¨‹åº", rc);
+		printf("SQLite´íÎó£º%d£¬ÎŞ·¨³õÊ¼»¯³ÌĞò", rc);
 		gets_s(NULL, 0);
 		sqlite3_close_v2(db);
 		exit(rc);

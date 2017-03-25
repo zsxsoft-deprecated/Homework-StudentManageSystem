@@ -1,10 +1,11 @@
-﻿#include "stdafx.h"
+#include "stdafx.h"
 #include "types.h"
 #include <stdio.h>
+#include "utils.h"
 
 #define READ_JSON(variable, file)\
 	{\
-		char* data = types_read_file(file);\
+		unsigned char* data = types_read_file(file);\
 		variable = cJSON_Parse(data);\
 		variable##_length = cJSON_GetArraySize(variable);\
 		free(data);\
@@ -21,7 +22,11 @@
 	void dump_##json_variable() {\
 		int i;\
 		for (i = 0; i < json_variable##_length; i++) {\
-			printf("%d = %s\t", i, cJSON_GetArrayItem(json_variable, i)->valuestring);\
+			const char *utf8_data = cJSON_GetArrayItem(json_variable, i)->valuestring;\
+			const unsigned char *gbk_data = NULL; \
+			utf8_to_gbk_all((unsigned char*)utf8_data, &gbk_data); \
+			printf("%d = %s\t", i, (const char*)gbk_data); \
+			free(gbk_data);\
 		}\
 	}
 
@@ -47,7 +52,7 @@ cJSON* get_college(char* str) {
 	return NULL;
 }
 
-char* types_read_file(char* json_name) {
+unsigned char* types_read_file(char* json_name) {
 	char *path = malloc(sizeof(char) * 255);
 	
 	strcpy(path, "./data/");
@@ -57,10 +62,11 @@ char* types_read_file(char* json_name) {
 	fseek(fp, 0, SEEK_END);
 	long fsize = ftell(fp);
 	fseek(fp, 0, SEEK_SET); 
-	char *buffer = malloc(fsize + 1);
-	long readsize = fread(buffer, sizeof(char), fsize, fp);
+	unsigned char *buffer = malloc(fsize + 1);
+	long readsize = fread(buffer, sizeof(unsigned char), fsize, fp);
 	fclose(fp);
 	buffer[readsize] = '\0';
+	
 	return buffer;
 }
 

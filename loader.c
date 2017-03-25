@@ -1,4 +1,4 @@
-ï»¿#include "stdafx.h"
+#include "stdafx.h"
 #include "loader.h"
 #include "utils.h"
 #include "third-party/cjson/cJSON.h"
@@ -14,15 +14,15 @@
 	}
 #define INPUT_AND_DUMP(text, name, json_variable) \
 		while (1) {\
-			printf("%s%s%s", "è¯·è¾“å…¥", text, "ï¼ˆ");\
+			printf("%s%s%s", "ÇëÊäÈë", text, "£¨");\
 			dump_##json_variable();\
-			printf("ï¼‰ï¼š");\
+			printf("£©£º");\
 			if (scanf_s("%d", &name) == EOF) {\
 				break_while = 1;\
 				break;\
 			}\
 			if (name >= json_variable##_length) {\
-				printf("%s%s%s", "è¾“å…¥çš„", text, "ä¿¡æ¯é”™è¯¯ï¼Œè¯·é‡æ–°è¾“å…¥ã€‚\n");\
+				printf("%s%s%s", "ÊäÈëµÄ", text, "ĞÅÏ¢´íÎó£¬ÇëÖØĞÂÊäÈë¡£\n");\
 				continue;\
 			}\
 			break;\
@@ -87,27 +87,25 @@ int check_gov_id(char *gov_id)
 	return 1;
 }
 
-// å­¦å·ã€å§“åã€æ€§åˆ«ã€å›½åˆ«ã€å‡ºç”Ÿå¹´æœˆã€æ°‘æ—ã€æ”¿æ²»é¢è²Œã€èº«ä»½è¯å·ã€å­¦ç”Ÿç±»åˆ«ã€å…¥å­¦å¹´æœˆã€å…¥å­¦æ–¹å¼ã€å­¦é™¢ã€ä¸“ä¸šã€å­¦åˆ¶ã€åŸ¹å…»å±‚æ¬¡ã€å¹´çº§ã€ç­çº§å·ã€æŒ‡å¯¼å‘˜
+// Ñ§ºÅ¡¢ĞÕÃû¡¢ĞÔ±ğ¡¢¹ú±ğ¡¢³öÉúÄêÔÂ¡¢Ãñ×å¡¢ÕşÖÎÃæÃ²¡¢Éí·İÖ¤ºÅ¡¢Ñ§ÉúÀà±ğ¡¢ÈëÑ§ÄêÔÂ¡¢ÈëÑ§·½Ê½¡¢Ñ§Ôº¡¢×¨Òµ¡¢Ñ§ÖÆ¡¢ÅàÑø²ã´Î¡¢Äê¼¶¡¢°à¼¶ºÅ¡¢Ö¸µ¼Ô±
 
 void load_from_stdin(void) {
 	char* id = malloc(sizeof(char) * 20);
 	char* admission_date = malloc(sizeof(char) * 60);
 	char* gov_id = malloc(sizeof(char) * 20);
-	char* instructor = malloc(sizeof(char) * 60);
+	char* instructor = NULL; // malloc(sizeof(char) * 60);
 	char* temp = malloc(sizeof(char) * 100);
-	char* sql = NULL;
-	char* name = NULL;// = malloc(sizeof(char) * 60);
+	char* sql;
+	char* name = NULL;// malloc(sizeof(char) * 60);
 
 	char* admission_year_from_id = malloc(sizeof(char) * 3);
 	char* college_id = malloc(sizeof(char) * 3);
 	char* birthday_from_gov_id = malloc(sizeof(char) * 10);
 	char* formatted_birthday = malloc(sizeof(char) * 20);
-	char* college_from_json = malloc(sizeof(char) * 10);
+	char* college_from_json;
 	char* discipline_from_json = malloc(sizeof(char) * 10);
-	char* training_level_from_json = malloc(sizeof(char) * 10);
-	int learn_year_from_json = 0;
 
-	cJSON* college = NULL;
+	cJSON* college;
 	cJSON *discipline = NULL;
 
 	int nation = 0;
@@ -117,29 +115,28 @@ void load_from_stdin(void) {
 	int source = 0;
 	int admission = 0;
 	int admission_year = 0, admission_month = 0, admission_day = 0;
-	int grade = 0;
-	int learn_year = 0;
+	int grade;
 
 	time_t admission_timestamp = 0;
-	time_t birthday_timestamp = 0;
+	time_t birthday_timestamp;
 
-	int utf8_len = 0;
+	int utf8_len;
 
 	int break_while = 0;
 
 	while (1) {
 		
-		printf("è¯·è¾“å…¥å­¦å·ï¼š");
+		printf("ÇëÊäÈëÑ§ºÅ£º");
 		if (scanf_s("%s", id, 10) == EOF) break;
 		if (strlen(id) != 9) {
-			printf("å­¦å·ä½æ•°ä¸æ­£ç¡®");
+			printf("Ñ§ºÅÎ»Êı²»ÕıÈ·");
 			break;
 		}
 		
 		COPY_STRING(college_id, id, 0, 2)
 		college = get_college(college_id);
 		if (college == NULL) {
-			printf("å­¦å·æ‰€ç¤ºçš„å­¦é™¢ä¸å­˜åœ¨ã€‚\n");
+			printf("Ñ§ºÅËùÊ¾µÄÑ§Ôº²»´æÔÚ¡£\n");
 			break;
 		}
 		college_from_json = cJSON_GetObjectItem(college, "name")->valuestring;
@@ -156,7 +153,7 @@ void load_from_stdin(void) {
 				}
 			}
 			if (found_flag == 0) {
-				printf("å­¦å·æ‰€ç¤ºçš„ä¸“ä¸šä¸å­˜åœ¨ã€‚\n");
+				printf("Ñ§ºÅËùÊ¾µÄ×¨Òµ²»´æÔÚ¡£\n");
 				break;
 			}
 		}
@@ -170,57 +167,58 @@ void load_from_stdin(void) {
 			if (stat == SQLITE_ROW) {
 				int ret = sqlite3_column_int(stmt, 0);
 				if (ret > 0) {
-					printf("è¿™ä¸ªå­¦å·å·²ç»å­˜åœ¨ï¼\n");
+					printf("Õâ¸öÑ§ºÅÒÑ¾­´æÔÚ£¡\n");
 					sqlite3_finalize(stmt);
 					break;
 				}
 			}
 			else {
-				printf("æŸ¥è¯¢å‡ºé”™ï¼ï¼š%s\n", sqlite3_errmsg(db));
+				printf("²éÑ¯³ö´í£¡£º%s\n", sqlite3_errmsg(db));
 				sqlite3_finalize(stmt);
 				break;
 			}
 		}
 
-		printf("è¯·è¾“å…¥å§“åï¼š");
+		printf("ÇëÊäÈëĞÕÃû£º");
 		SCANF_UTF8(name, 10)
+		// scanf_s("%s", name, 10);
 
 		while (1) {
-			printf("è¯·è¾“å…¥æ€§åˆ«ï¼ˆ0 = å¥³ï¼Œ1 = ç”·ï¼‰ï¼š");
+			printf("ÇëÊäÈëĞÔ±ğ£¨0 = Å®£¬1 = ÄĞ£©£º");
 			if (scanf_s("%d", &sex, sizeof(sex)) == EOF) {
 				break_while = 1;
 				break;
 			}
 			if (sex != 0 && sex != 1) {
-				printf("æ€§åˆ«è¾“å…¥é”™è¯¯ï¼Œè¯·é‡æ–°è¾“å…¥ã€‚\n");
+				printf("ĞÔ±ğÊäÈë´íÎó£¬ÇëÖØĞÂÊäÈë¡£\n");
 				continue;
 			}
 			break;
 		}
 		if (break_while == 1) break;
 		
-		INPUT_AND_DUMP("å›½å®¶", nation, nations)
-		INPUT_AND_DUMP("æ°‘æ—", nationality, nationalities)
-		INPUT_AND_DUMP("æ”¿æ²»é¢è²Œ", political_status, political_status)
+		INPUT_AND_DUMP("¹ú¼Ò", nation, nations)
+		INPUT_AND_DUMP("Ãñ×å", nationality, nationalities)
+		INPUT_AND_DUMP("ÕşÖÎÃæÃ²", political_status, political_status)
 
 		while (1) {
-			printf("è¯·è¾“å…¥èº«ä»½è¯å·ï¼š");
+			printf("ÇëÊäÈëÉí·İÖ¤ºÅ£º");
 			if (scanf_s("%s", gov_id, 19) == EOF) {
 				break_while = 1;
 				break;
 			}
 			if (check_gov_id(gov_id) == 0 || gov_id[16] % 2 != sex) {
-				printf("èº«ä»½è¯å·è¾“å…¥é”™è¯¯ï¼Œè¯·é‡æ–°æ ¸å®ã€‚\n");
+				printf("Éí·İÖ¤ºÅÊäÈë´íÎó£¬ÇëÖØĞÂºËÊµ¡£\n");
 				continue;
 			}
 			break;
 		}
 		if (break_while == 1) break;
 
-		INPUT_AND_DUMP("å­¦ç”Ÿç±»åˆ«", source, sources)
+		INPUT_AND_DUMP("Ñ§ÉúÀà±ğ", source, sources)
 
 		while (1) {
-			printf("è¯·è¾“å…¥å…¥å­¦å¹´æœˆï¼š");
+			printf("ÇëÊäÈëÈëÑ§ÄêÔÂ£º");
 			if (scanf_s("%s", admission_date, 20) == EOF) {
 				break_while = 1;
 				break;
@@ -230,10 +228,10 @@ void load_from_stdin(void) {
 			COPY_STRING(admission_year_from_id, id, 2, 2);
 			admission_year_from_id[2] = '\0';
 			if (admission_year != atoi(admission_year_from_id) + 2000) {
-				printf("å…¥å­¦å¹´ä»½å’Œå­¦å·ä¸ä¸€è‡´ï¼Œè¯·æ³¨æ„ã€‚\n");
+				printf("ÈëÑ§Äê·İºÍÑ§ºÅ²»Ò»ÖÂ£¬Çë×¢Òâ¡£\n");
 			}
 			if (admission_month < 8 || admission_month > 10) {
-				printf("å…¥å­¦æœˆä»½ä¸å¯¹ï¼Œè¯·é‡æ–°æ ¸å®ã€‚\n");
+				printf("ÈëÑ§ÔÂ·İ²»¶Ô£¬ÇëÖØĞÂºËÊµ¡£\n");
 				continue;
 			}
 			admission_timestamp = get_unix_timestamp(admission_year, admission_month, admission_day);
@@ -241,8 +239,9 @@ void load_from_stdin(void) {
 		}
 		if (break_while == 1) break;
 		
-		INPUT_AND_DUMP("å…¥å­¦æ–¹å¼", admission, admissions)
-		printf("è¯·è¾“å…¥æŒ‡å¯¼å‘˜ï¼š");
+		INPUT_AND_DUMP("ÈëÑ§·½Ê½", admission, admissions)
+		printf("ÇëÊäÈëÖ¸µ¼Ô±£º");
+		// scanf_s("%s", instructor, 20);
 		SCANF_UTF8(instructor, 20)
 
 

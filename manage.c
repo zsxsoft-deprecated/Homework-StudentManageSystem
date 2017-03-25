@@ -1,4 +1,4 @@
-ï»¿#include "stdafx.h"
+#include "stdafx.h"
 #include "menu.h"
 #include "types.h"
 #include "loader.h"
@@ -12,21 +12,18 @@ void exit_program(void) {
 
 int main (void) {
 
-	SetConsoleOutputCP(65001);
-	
-	setlocale(LC_ALL, "zh_CN.UTF-8");
 	print_welcome();
 	
-	append_menu_item('I', "è¾“å…¥å­¦ç”Ÿä¿¡æ¯", load_from_stdin);
-	append_menu_item('O', "è¾“å‡ºå­¦ç”Ÿä¿¡æ¯", output_student_data);
-	/*append_menu_item('T', "è¾“å‡ºå­¦ç”Ÿç»Ÿè®¡ä¿¡æ¯", output_student_statistic);
-	append_menu_item('F', "æŒ‰å­¦ç”Ÿå·æŸ¥æ‰¾å¹¶è¾“å‡ºå…¶å·¥èµ„ä¿¡æ¯", find_student);
+	append_menu_item('I', "ÊäÈëÑ§ÉúĞÅÏ¢", load_from_stdin);
+	append_menu_item('O', "Êä³öÑ§ÉúĞÅÏ¢", output_student_data);
+	/*append_menu_item('T', "Êä³öÑ§ÉúÍ³¼ÆĞÅÏ¢", output_student_statistic);
+	append_menu_item('F', "°´Ñ§ÉúºÅ²éÕÒ²¢Êä³öÆä¹¤×ÊĞÅÏ¢", find_student);
 	*/
-	append_menu_item('T', "è¾“å‡ºç»Ÿè®¡ä¿¡æ¯", display_stat);
-	append_menu_item('D', "åˆ é™¤", display_delete_menu);
-	append_menu_item('S', "æ’åº", display_sort_menu);
-	append_menu_item('U', "SQLæŸ¥è¯¢", output_student_with_sql);
-	append_menu_item('Q', "é€€å‡ºç¨‹åº", exit_program);
+	append_menu_item('T', "Êä³öÍ³¼ÆĞÅÏ¢", display_stat);
+	append_menu_item('D', "É¾³ı", display_delete_menu);
+	append_menu_item('S', "ÅÅĞò", display_sort_menu);
+	append_menu_item('U', "SQL²éÑ¯", output_student_with_sql);
+	append_menu_item('Q', "ÍË³ö³ÌĞò", exit_program);
 
 	//read_from_file();
 

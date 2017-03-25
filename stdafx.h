@@ -1,5 +1,4 @@
 #pragma once
-#pragma execution_character_set( "utf-8" )
 #ifdef _MSC_VER
 #include "targetver.h"
 #endif

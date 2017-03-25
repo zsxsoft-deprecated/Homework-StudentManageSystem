@@ -1,4 +1,4 @@
-ï»¿#include "stdafx.h"
+#include "stdafx.h"
 #define MENU_MAX_SIZE 10
 typedef struct menu_data {
 	char input_key;
@@ -25,7 +25,7 @@ void get_time (char* output) {
 	time(&rawtime);
 	timeinfo = localtime(&rawtime);
 
-	sprintf(output, "çŽ°åœ¨æ˜¯ï¼š %d å¹´ %d æœˆ %d æ—¥ï¼ˆæ˜ŸæœŸ%dï¼‰ %d:%d:%d\n",
+	sprintf(output, "ÏÖÔÚÊÇ£º %d Äê %d ÔÂ %d ÈÕ£¨ÐÇÆÚ%d£© %d:%d:%d\n",
 		timeinfo->tm_year + 1900, timeinfo->tm_mon + 1, timeinfo->tm_mday, timeinfo->tm_wday, timeinfo->tm_hour, timeinfo->tm_min, timeinfo->tm_sec);
 }
 
@@ -50,15 +50,15 @@ void do_menu(void) {
 	int i;
 	while (1) {
 		print_menu();
-		printf("è¯·é€‰æ‹©ï¼š( ");
+		printf("ÇëÑ¡Ôñ£º( ");
 		for (i = 0; i <= menu_current_size; i++) {
 			printf("%c ", menu[i].input_key);
 		}
-		printf(")ï¼š");
+		printf(")£º");
 		int flag = 1;
 		scanf("%c", &input_key);
 		if (input_key == '\n' || input_key == '\r' || input_key == ' ') continue;
-		if (input_key > 'a') input_key -= ('a' - 'A'); // å°å†™è¯†åˆ«
+		if (input_key > 'a') input_key -= ('a' - 'A'); // Ð¡Ð´Ê¶±ð
 		for (i = 0; i <= menu_current_size; i++) {
 			if (menu[i].input_key == input_key) {
 				flag = 0;
@@ -66,7 +66,7 @@ void do_menu(void) {
 			}
 		}
 		if (flag == 1) {
-			printf("æ ¼å¼é”™è¯¯ï¼Œè¯·é‡æ–°è¾“å…¥ï¼\n");
+			printf("¸ñÊ½´íÎó£¬ÇëÖØÐÂÊäÈë£¡\n");
 		}
 		eat_line();
 	}
