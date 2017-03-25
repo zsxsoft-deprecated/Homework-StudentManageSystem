@@ -84,8 +84,6 @@ unsigned char* types_read_file(char* json_name) {
 	fclose(fp);
 	buffer[readsize] = '\0';
 
-	cJSON* json_variable = NULL;
-
 	return buffer;
 }
 

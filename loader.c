@@ -43,7 +43,7 @@
 
 #define SCANF_UTF8(variable, length)\
 	if (scanf_s("%s", temp, length) == EOF) break;\
-	utf8_len = gbk_to_utf8((unsigned char *)temp, NULL, NULL);\
+	utf8_len = gbk_to_utf8((unsigned char *)temp, NULL, (int)NULL);\
 	variable = malloc(sizeof(char) * (utf8_len + 1));\
 	gbk_to_utf8((unsigned char *)temp, (unsigned char *)variable, utf8_len);
 

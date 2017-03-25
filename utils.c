@@ -17,7 +17,7 @@ time_t get_unix_timestamp(int y, int m, int d) {
 	return timestamp;
 }
 
-int utf8_to_gbk(unsigned char * utf8_str, unsigned char * gbk_str)
+int utf8_to_gbk(unsigned char *utf8_str, unsigned char *gbk_str)
 {
 	wchar_t *unicode_str;
 	int ret;
@@ -64,4 +64,11 @@ int utf8_to_gbk_all(unsigned char *utf8_str, unsigned char **gbk_str)
 	int gbk_len = utf8_to_gbk((unsigned char *)utf8_str, NULL);
 	*gbk_str = malloc(sizeof(char) * (gbk_len + 1));
 	return utf8_to_gbk((unsigned char *)utf8_str, (unsigned char *)*gbk_str);
+}
+
+int gbk_to_utf8_all(unsigned char *gbk_str, unsigned char **utf8_str)
+{
+	int utf8_len = gbk_to_utf8((unsigned char *)gbk_str, NULL, (int)NULL);
+	*utf8_str = malloc(sizeof(char) * (utf8_len + 1));
+	return gbk_to_utf8((unsigned char *)gbk_str, (unsigned char *)*utf8_str, utf8_len);
 }

@@ -52,7 +52,7 @@ void output_by_statement(char *sql) {
 
 	printf("执行SQL：");
 	SetConsoleTextAttribute(hConsole, FOREGROUND_GREEN | FOREGROUND_RED | FOREGROUND_INTENSITY);
-	printf("%s\n\n", sql);
+	PRINT_UTF8("%s\n\n", sql);
 	SetConsoleTextAttribute(hConsole, FOREGROUND_RED | FOREGROUND_GREEN | FOREGROUND_BLUE | FOREGROUND_INTENSITY);
 	sqlite3_stmt *stmt;
 	sqlite3_prepare_v2(db, sql, -1, &stmt, NULL);
@@ -159,6 +159,7 @@ void output_student_with_sql(void) {
 
 void display_delete_menu(void) {
 	char* name = malloc(sizeof(char) * 1000);
+	char* utf8_name = malloc(sizeof(char) * 1000);
 	char* delete_sql = malloc(sizeof(char) * 1000);
 	strcpy(delete_sql, "DELETE FROM students ");
 	printf("删除方式选择菜单\n\
@@ -176,21 +177,23 @@ q : 不删除退出\n\
 		printf("输入待删除ID：");
 		scanf_s("%s", name, 10);
 		strcat(delete_sql, " WHERE id = '");
-		strcat(delete_sql, name);
+		strcat(delete_sql, name); // SQL Injection safe bug!!!!
 		strcat(delete_sql, "'");
 		output_by_statement(delete_sql);
 		break;
 	case '2':
 		printf("输入待删除专业：");
 		scanf_s("%s", name, 10);
+		gbk_to_utf8_all((unsigned char*)name, (unsigned char**)&utf8_name);
 		strcat(delete_sql, " WHERE discipline = '");
-		strcat(delete_sql, name);
+		strcat(delete_sql, utf8_name); // SQL Injection safe bug!!!!
 		strcat(delete_sql, "'");
 		output_by_statement(delete_sql);
 		break;
 	default:
 		return;
 	}
+	free(utf8_name);
 	free(delete_sql);
 	free(name);
 }
