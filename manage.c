@@ -10,10 +10,10 @@ void exit_program(void) {
 	exit(0);
 }
 
-int main (void) {
+int main(void) {
 
 	print_welcome();
-	
+
 	append_menu_item('I', "输入学生信息", load_from_stdin);
 	append_menu_item('O', "输出学生信息", output_student_data);
 	/*append_menu_item('T', "输出学生统计信息", output_student_statistic);
@@ -35,6 +35,6 @@ int main (void) {
 #endif
 	types_destructor();
 	database_destructor();
-    return 0;
+	return 0;
 }
 

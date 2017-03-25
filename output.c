@@ -98,24 +98,30 @@ void output_by_statement(char *sql) {
 	printf("\n--------------------------------------\n");
 	while (stat == SQLITE_ROW) {
 		int i;
-		
+
 		for (i = 0; i < columns; i++) {
 			change_color(hConsole, i, (WORD)NULL);
 			const char* name = sqlite3_column_name(stmt, i);
 			printf("　　");
 			if (strcmp(name, "sex") == 0) {
 				printf("%s", sqlite3_column_int(stmt, i) == 0 ? "女" : "男");
-			} else if (strcmp(name, "admission_type") == 0) {
+			}
+			else if (strcmp(name, "admission_type") == 0) {
 				PRINT_UTF8("%s", get_admission(sqlite3_column_int(stmt, i)));
-			} else if (strcmp(name, "nationality") == 0) {
-				PRINT_UTF8("%s", get_nationality(sqlite3_column_int(stmt, i)));
-			} else if (strcmp(name, "nation") == 0) {
+			}
+			else if (strcmp(name, "nationality") == 0) {
+				PRINT_UTF8("%s", get_nationality((char*)sqlite3_column_text(stmt, i)));
+			}
+			else if (strcmp(name, "nation") == 0) {
 				PRINT_UTF8("%s", get_nation(sqlite3_column_int(stmt, i)));
-			} else if (strcmp(name, "sources") == 0) {
+			}
+			else if (strcmp(name, "sources") == 0) {
 				PRINT_UTF8("%s", get_source(sqlite3_column_int(stmt, i)));
-			} else if (strcmp(name, "political_status") == 0) {
-				PRINT_UTF8("%s", get_political_status(sqlite3_column_int(stmt, i)));
-			} else if (strcmp(name, "birth_time") == 0 || strcmp(name, "admission_time") == 0) {
+			}
+			else if (strcmp(name, "political_status") == 0) {
+				PRINT_UTF8("%s", get_political_status((char*)sqlite3_column_text(stmt, i)));
+			}
+			else if (strcmp(name, "birth_time") == 0 || strcmp(name, "admission_time") == 0) {
 				time_t raw_time = sqlite3_column_int(stmt, i);
 				PRINT_UTF8("%s", ctime(&raw_time));
 			}
@@ -125,7 +131,7 @@ void output_by_statement(char *sql) {
 			printf("　　");
 			if (i % 5 == 4) printf("\n");
 			change_color(hConsole, -1, saved_attributes);
-			
+
 		}
 		printf("\n--------------------------------------\n");
 		stat = sqlite3_step(stmt);
@@ -197,7 +203,7 @@ void display_stat(void) {
 }
 
 
-void display_sort_menu(void) { 
+void display_sort_menu(void) {
 	printf("排序方式选择菜单\n\
 == == == == == == == == == == == == == == == ==\n\
 1： 按学号从小到大排序\n\
@@ -213,12 +219,12 @@ q : 不排序退出\n\
 	eat_line();
 	char w = (char)getchar();
 	switch (w) {
-	DO_SORT_FUNCTION('1', "SELECT * FROM students ORDER BY id ASC")
-	DO_SORT_FUNCTION('2', "SELECT * FROM students ORDER BY id DESC")
-	DO_SORT_FUNCTION('3', "SELECT * FROM students ORDER BY name ASC")
-	DO_SORT_FUNCTION('4', "SELECT * FROM students ORDER BY sex ASC")
-	DO_SORT_FUNCTION('5', "SELECT * FROM students ORDER BY birth_time ASC")
-	DO_SORT_FUNCTION('6', "SELECT * FROM students ORDER BY birth_time DESC")
+		DO_SORT_FUNCTION('1', "SELECT * FROM students ORDER BY id ASC")
+			DO_SORT_FUNCTION('2', "SELECT * FROM students ORDER BY id DESC")
+			DO_SORT_FUNCTION('3', "SELECT * FROM students ORDER BY name ASC")
+			DO_SORT_FUNCTION('4', "SELECT * FROM students ORDER BY sex ASC")
+			DO_SORT_FUNCTION('5', "SELECT * FROM students ORDER BY birth_time ASC")
+			DO_SORT_FUNCTION('6', "SELECT * FROM students ORDER BY birth_time DESC")
 	default:
 		break;
 	}

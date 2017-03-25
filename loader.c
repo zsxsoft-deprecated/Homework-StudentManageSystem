@@ -12,22 +12,34 @@
 	strncpy(dest, src + index, len);\
 	dest[len] = '\0';\
 	}
-#define INPUT_AND_DUMP(text, name, json_variable) \
+#define INPUT_AND_DUMP(text, scanf_if, name, json_variable, verify_code) \
 		while (1) {\
 			printf("%s%s%s", "请输入", text, "（");\
 			dump_##json_variable();\
 			printf("）：");\
-			if (scanf_s("%d", &name) == EOF) {\
+			if (scanf_if == EOF) {\
 				break_while = 1;\
 				break;\
 			}\
+			verify_code\
+			break;\
+		}\
+		if (break_while == 1) break;
+
+#define INPUT_AND_DUMP_ARRAY(text, name, json_variable) \
+		INPUT_AND_DUMP(text, scanf_s("%d", &name), name, json_variable, {\
 			if (name >= json_variable##_length) {\
 				printf("%s%s%s", "输入的", text, "信息错误，请重新输入。\n");\
 				continue;\
 			}\
-			break;\
-		}\
-		if (break_while == 1) break;
+		})
+#define INPUT_AND_DUMP_OBJECT(text, name, json_variable) \
+		INPUT_AND_DUMP(text, scanf_s("%s", name, 10), name, json_variable, {\
+			if (!cJSON_HasObjectItem(json_variable, name)) {\
+				printf("%s%s%s", "输入的", text, "信息错误，请重新输入。\n");\
+				continue;\
+			}\
+		})
 
 #define SCANF_UTF8(variable, length)\
 	if (scanf_s("%s", temp, length) == EOF) break;\
@@ -105,13 +117,14 @@ void load_from_stdin(void) {
 	char* college_from_json;
 	char* discipline_from_json = malloc(sizeof(char) * 10);
 
+	char* nationality = malloc(sizeof(char) * 10);
+	char* political_status = malloc(sizeof(char) * 10);
+
 	cJSON* college;
 	cJSON *discipline = NULL;
 
 	int nation = 0;
 	int sex = 0;
-	int nationality = 0;
-	int political_status = 0;
 	int source = 0;
 	int admission = 0;
 	int admission_year = 0, admission_month = 0, admission_day = 0;
@@ -125,16 +138,16 @@ void load_from_stdin(void) {
 	int break_while = 0;
 
 	while (1) {
-		
+
 		printf("请输入学号：");
 		if (scanf_s("%s", id, 10) == EOF) break;
 		if (strlen(id) != 9) {
 			printf("学号位数不正确");
 			break;
 		}
-		
+
 		COPY_STRING(college_id, id, 0, 2)
-		college = get_college(college_id);
+			college = get_college(college_id);
 		if (college == NULL) {
 			printf("学号所示的学院不存在。\n");
 			break;
@@ -181,25 +194,25 @@ void load_from_stdin(void) {
 
 		printf("请输入姓名：");
 		SCANF_UTF8(name, 10)
-		// scanf_s("%s", name, 10);
+			// scanf_s("%s", name, 10);
 
-		while (1) {
-			printf("请输入性别（0 = 女，1 = 男）：");
-			if (scanf_s("%d", &sex, sizeof(sex)) == EOF) {
-				break_while = 1;
+			while (1) {
+				printf("请输入性别（0 = 女，1 = 男）：");
+				if (scanf_s("%d", &sex, sizeof(sex)) == EOF) {
+					break_while = 1;
+					break;
+				}
+				if (sex != 0 && sex != 1) {
+					printf("性别输入错误，请重新输入。\n");
+					continue;
+				}
 				break;
 			}
-			if (sex != 0 && sex != 1) {
-				printf("性别输入错误，请重新输入。\n");
-				continue;
-			}
-			break;
-		}
 		if (break_while == 1) break;
-		
-		INPUT_AND_DUMP("国家", nation, nations)
-		INPUT_AND_DUMP("民族", nationality, nationalities)
-		INPUT_AND_DUMP("政治面貌", political_status, political_status)
+
+		INPUT_AND_DUMP_ARRAY("国家", nation, nations);
+		INPUT_AND_DUMP_OBJECT("民族", nationality, nationalities);
+		INPUT_AND_DUMP_OBJECT("政治面貌", political_status, political_statuses);
 
 		while (1) {
 			printf("请输入身份证号：");
@@ -215,7 +228,7 @@ void load_from_stdin(void) {
 		}
 		if (break_while == 1) break;
 
-		INPUT_AND_DUMP("学生类别", source, sources)
+		INPUT_AND_DUMP_ARRAY("学生类别", source, sources);
 
 		while (1) {
 			printf("请输入入学年月：");
@@ -224,7 +237,7 @@ void load_from_stdin(void) {
 				break;
 			}
 			birthday_format(&admission_year, &admission_month, &admission_day, admission_date);
-			
+
 			COPY_STRING(admission_year_from_id, id, 2, 2);
 			admission_year_from_id[2] = '\0';
 			if (admission_year != atoi(admission_year_from_id) + 2000) {
@@ -238,11 +251,11 @@ void load_from_stdin(void) {
 			break;
 		}
 		if (break_while == 1) break;
-		
-		INPUT_AND_DUMP("入学方式", admission, admissions)
+
+		INPUT_AND_DUMP_ARRAY("入学方式", admission, admissions);
 		printf("请输入指导员：");
 		// scanf_s("%s", instructor, 20);
-		SCANF_UTF8(instructor, 20)
+		SCANF_UTF8(instructor, 20);
 
 
 		int birthday_year, birthday_month, birthday_day;
@@ -274,8 +287,8 @@ void load_from_stdin(void) {
 		sqlite3_bind_int(stmt, 3, sex);
 		sqlite3_bind_int(stmt, 4, (int)birthday_timestamp);
 		sqlite3_bind_int(stmt, 5, nation);
-		sqlite3_bind_int(stmt, 6, nationality);
-		sqlite3_bind_int(stmt, 7, political_status);
+		sqlite3_bind_text(stmt, 6, nationality, -1, SQLITE_TRANSIENT);
+		sqlite3_bind_text(stmt, 7, political_status, -1, SQLITE_TRANSIENT);
 		sqlite3_bind_text(stmt, 8, gov_id, -1, SQLITE_TRANSIENT);
 		sqlite3_bind_int(stmt, 9, source);
 		sqlite3_bind_int(stmt, 10, (int)admission_timestamp);
@@ -293,25 +306,27 @@ void load_from_stdin(void) {
 			printf("SQLite Error: %s", sqlite3_errmsg(db));
 		}
 		sqlite3_exec(db, "commit;", NULL, NULL, NULL);
-		sqlite3_finalize(stmt);		
+		sqlite3_finalize(stmt);
 		break;
 	}
-	
-//	FREE(discipline);
+
+	//	FREE(discipline);
 	FREE(id);
 	FREE(name);
 	FREE(college_id);
-//	FREE(college);
+	//	FREE(college);
 	FREE(instructor);
 	FREE(admission_date);
 	FREE(temp);
 	FREE(admission_year_from_id);
 	FREE(birthday_from_gov_id);
-//	FREE(college_from_json);
-//	FREE(discipline_from_json);
-//	FREE(training_level_from_json);
+	FREE(political_status);
+	FREE(nationality);
+	//	FREE(college_from_json);
+	//	FREE(discipline_from_json);
+	//	FREE(training_level_from_json);
 	FREE(formatted_birthday);
-	
+
 }
 
 #undef FREE
