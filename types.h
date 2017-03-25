@@ -21,5 +21,7 @@ EXPORT_OBJECT_FUNCTION(political_status, political_statuses)
 extern cJSON* colleges;
 extern int colleges_length;
 cJSON* get_college(char*);
+cJSON* get_instructor_json(char*);
+char* get_instructor_name(char*);
 #undef EXPORT_ARRAY_FUNCTION
 #undef EXPORT_OBJECT_FUNCTION

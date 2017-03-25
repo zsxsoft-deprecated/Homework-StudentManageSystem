@@ -61,7 +61,7 @@
 
 cJSON* colleges = NULL;
 int colleges_length = 0;
-	
+
 EXPORT_ARRAY_FUNCTION(admission, admissions)
 EXPORT_ARRAY_FUNCTION(nation, nations)
 EXPORT_ARRAY_FUNCTION(source, sources)
@@ -78,12 +78,12 @@ unsigned char* types_read_file(char* json_name) {
 	FILE *fp = fopen(path, "rb");
 	fseek(fp, 0, SEEK_END);
 	long fsize = ftell(fp);
-	fseek(fp, 0, SEEK_SET); 
+	fseek(fp, 0, SEEK_SET);
 	unsigned char *buffer = malloc(fsize + 1);
 	long readsize = fread(buffer, sizeof(unsigned char), fsize, fp);
 	fclose(fp);
 	buffer[readsize] = '\0';
-	
+
 	cJSON* json_variable = NULL;
 
 	return buffer;
@@ -121,6 +121,24 @@ cJSON* get_college(char* str) {
 	return NULL;
 }
 
+cJSON* get_instructor_json(char* id) {
+	char* ret = id;
+	cJSON *instructor_single;
+	cJSON_ArrayForEach(instructor_single, instructors)
+	{
+		if (strcmp(id, cJSON_GetObjectItem(instructor_single, "id")->valuestring) == 0)
+		{
+			return instructor_single;
+		}
+	}
+	return NULL;
+}
+
+char* get_instructor_name(char* id) {
+	char* ret = id;
+	cJSON* instructor = get_instructor_json(id);
+	return instructor == NULL ? NULL : cJSON_GetObjectItem(instructor, "name")->valuestring;
+}
 #undef READ_JSON
 #undef EXPORT_ARRAY_FUNCTION
 #undef EXPORT_OBJECT_FUNCTION

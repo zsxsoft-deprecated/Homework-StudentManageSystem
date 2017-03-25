@@ -36,3 +36,7 @@ int sex_validator(char **data) {
 int amount_validator(double *data) {
 	return !(*data >= 0 && *data <= 9999);
 }
+
+#undef INPUT_DATA_WITHOUT_SCANF
+#undef INPUT_DATA
+#undef INPUT_DATA_WIDE

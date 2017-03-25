@@ -121,6 +121,9 @@ void output_by_statement(char *sql) {
 			else if (strcmp(name, "political_status") == 0) {
 				PRINT_UTF8("%s", get_political_status((char*)sqlite3_column_text(stmt, i)));
 			}
+			else if (strcmp(name, "instructor") == 0) {
+				PRINT_UTF8("%s", get_instructor_name((char*)sqlite3_column_text(stmt, i)));
+			}
 			else if (strcmp(name, "birth_time") == 0 || strcmp(name, "admission_time") == 0) {
 				time_t raw_time = sqlite3_column_int(stmt, i);
 				PRINT_UTF8("%s", ctime(&raw_time));

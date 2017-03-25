@@ -17,10 +17,9 @@ time_t get_unix_timestamp(int y, int m, int d) {
 	return timestamp;
 }
 
-
 int utf8_to_gbk(unsigned char * utf8_str, unsigned char * gbk_str)
 {
-	wchar_t * unicode_str;
+	wchar_t *unicode_str;
 	int ret;
 	if (!utf8_str) return 0;
 	ret = MultiByteToWideChar(CP_UTF8, 0, (char *)utf8_str, -1, NULL, (int)NULL);
@@ -29,20 +28,18 @@ int utf8_to_gbk(unsigned char * utf8_str, unsigned char * gbk_str)
 	if (!ret) return 0;
 	ret = WideCharToMultiByte(CP_ACP, 0, unicode_str, -1, NULL, (int)NULL, NULL, NULL);
 	if (!gbk_str) {
-		if (unicode_str)
-			free(unicode_str);
+		if (unicode_str) free(unicode_str);
 		return ret;
 	}
 	ret = WideCharToMultiByte(CP_ACP, 0, unicode_str, -1, (char *)gbk_str, ret, NULL, NULL); 
 
-	if (unicode_str)
-		free(unicode_str);
+	if (unicode_str) free(unicode_str);
 
 	return ret;
 }
 
 int gbk_to_utf8(unsigned char *gbk_str, unsigned char *utf8_str, int utf8_len) {
-	wchar_t * unicode_str;
+	wchar_t *unicode_str;
 	int ret;
 	if (!gbk_str) return 0;
 	ret = MultiByteToWideChar(CP_ACP, 0, (char *)gbk_str, -1, NULL, (int)NULL);
@@ -51,20 +48,18 @@ int gbk_to_utf8(unsigned char *gbk_str, unsigned char *utf8_str, int utf8_len) {
 	if (!ret) return 0;
 	ret = WideCharToMultiByte(CP_UTF8, 0, unicode_str, -1, NULL, 0, NULL, NULL);
 	if (!utf8_str) {
-		if (unicode_str)
-			free(unicode_str);
+		if (unicode_str) free(unicode_str);
 		return ret;
 	}
 	ret = WideCharToMultiByte(CP_UTF8, 0, unicode_str, -1, (char *)utf8_str, utf8_len, NULL, NULL);
 
-	if (unicode_str)
-		free(unicode_str);
+	if (unicode_str) free(unicode_str);
 
 	return ret;
 }
 
 
-int utf8_to_gbk_all(unsigned char * utf8_str, unsigned char **gbk_str)
+int utf8_to_gbk_all(unsigned char *utf8_str, unsigned char **gbk_str)
 {
 	int gbk_len = utf8_to_gbk((unsigned char *)utf8_str, NULL);
 	*gbk_str = malloc(sizeof(char) * (gbk_len + 1));

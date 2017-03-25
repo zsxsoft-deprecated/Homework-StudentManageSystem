@@ -105,8 +105,6 @@ void load_from_stdin(void) {
 	char* id = malloc(sizeof(char) * 20);
 	char* admission_date = malloc(sizeof(char) * 60);
 	char* gov_id = malloc(sizeof(char) * 20);
-	char* instructor = NULL; // malloc(sizeof(char) * 60);
-	char* temp = malloc(sizeof(char) * 100);
 	char* sql;
 	char* name = NULL;// malloc(sizeof(char) * 60);
 
@@ -114,11 +112,15 @@ void load_from_stdin(void) {
 	char* college_id = malloc(sizeof(char) * 3);
 	char* birthday_from_gov_id = malloc(sizeof(char) * 10);
 	char* formatted_birthday = malloc(sizeof(char) * 20);
-	char* college_from_json;
-	char* discipline_from_json = malloc(sizeof(char) * 10);
+	char* college_from_json = NULL;
+	char* discipline_from_json = NULL;
+	char* instructor_from_json = NULL; // malloc(sizeof(char) * 60);
 
 	char* nationality = malloc(sizeof(char) * 10);
 	char* political_status = malloc(sizeof(char) * 10);
+
+	char* temp = malloc(sizeof(char) * 100);
+	char* temp2 = malloc(sizeof(char) * 100);
 
 	cJSON* college;
 	cJSON *discipline = NULL;
@@ -137,6 +139,7 @@ void load_from_stdin(void) {
 
 	int break_while = 0;
 
+
 	while (1) {
 
 		printf("请输入学号：");
@@ -146,8 +149,8 @@ void load_from_stdin(void) {
 			break;
 		}
 
-		COPY_STRING(college_id, id, 0, 2)
-			college = get_college(college_id);
+		COPY_STRING(college_id, id, 0, 2);
+		college = get_college(college_id);
 		if (college == NULL) {
 			printf("学号所示的学院不存在。\n");
 			break;
@@ -156,17 +159,40 @@ void load_from_stdin(void) {
 
 		{
 			int i, found_flag = 0;
-			COPY_STRING(temp, id, 4, 1);
+			COPY_STRING(temp, id, 4, 1); // temp = discipline
 			cJSON *disciplines = cJSON_GetObjectItem(college, "disciplines");
 			for (i = 0; i < cJSON_GetArraySize(disciplines); i++) {
 				discipline = cJSON_GetArrayItem(disciplines, i);
 				if (strcmp(temp, cJSON_GetObjectItem(discipline, "id")->valuestring) == 0) {
 					discipline_from_json = cJSON_GetObjectItem(discipline, "name")->valuestring;
 					found_flag = 1;
+					break;
 				}
 			}
 			if (found_flag == 0) {
 				printf("学号所示的专业不存在。\n");
+				break;
+			}
+
+			found_flag = 0;
+			COPY_STRING(temp2, id, 2, 2); // temp2 = grade
+			cJSON *instructor_single;
+			cJSON_ArrayForEach(instructor_single, instructors)
+			{
+				if (
+					strcmp(college_id, cJSON_GetObjectItem(instructor_single, "college")->valuestring) == 0 &&
+					strcmp(temp, cJSON_GetObjectItem(instructor_single, "discipline")->valuestring) == 0 &&
+					strcmp(temp2, cJSON_GetObjectItem(instructor_single, "grade")->valuestring) == 0
+				)
+				{
+					instructor_from_json = cJSON_GetObjectItem(instructor_single, "id")->valuestring;
+					found_flag = 1;
+					break;
+				}
+			}
+			if (found_flag == 0)
+			{
+				printf("找不到该学院、专业或班级对应的辅导员。\n");
 				break;
 			}
 		}
@@ -253,9 +279,6 @@ void load_from_stdin(void) {
 		if (break_while == 1) break;
 
 		INPUT_AND_DUMP_ARRAY("入学方式", admission, admissions);
-		printf("请输入指导员：");
-		// scanf_s("%s", instructor, 20);
-		SCANF_UTF8(instructor, 20);
 
 
 		int birthday_year, birthday_month, birthday_day;
@@ -299,7 +322,7 @@ void load_from_stdin(void) {
 		sqlite3_bind_int(stmt, 15, cJSON_GetObjectItem(discipline, "learn_year")->valueint);
 		sqlite3_bind_text(stmt, 16, cJSON_GetObjectItem(discipline, "training_level")->valuestring, -1, SQLITE_TRANSIENT);
 		sqlite3_bind_text(stmt, 17, temp, -1, SQLITE_TRANSIENT);
-		sqlite3_bind_text(stmt, 18, instructor, -1, SQLITE_TRANSIENT);
+		sqlite3_bind_text(stmt, 18, instructor_from_json, -1, SQLITE_TRANSIENT);
 
 		int ret = sqlite3_step(stmt);
 		if (ret != SQLITE_DONE) {
@@ -315,9 +338,10 @@ void load_from_stdin(void) {
 	FREE(name);
 	FREE(college_id);
 	//	FREE(college);
-	FREE(instructor);
+	FREE(instructor_from_json);
 	FREE(admission_date);
 	FREE(temp);
+	FREE(temp2);
 	FREE(admission_year_from_id);
 	FREE(birthday_from_gov_id);
 	FREE(political_status);
