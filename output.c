@@ -168,7 +168,7 @@ void display_delete_menu(void) {
 2 : 按专业名删除\n\
 q : 不删除退出\n\
 == == == == == == == == == == == == == == == == \n\
-请选择（1-8、q）：\
+请选择（1-2、q）：\
 ");
 	eat_line();
 	char w = (char)getchar();
@@ -220,17 +220,17 @@ void display_sort_menu(void) {
 6 : 按年龄从大到小排序\n\
 q : 不排序退出\n\
 == == == == == == == == == == == == == == == == \n\
-请选择（1-8、q）：\
+请选择（1-6、q）：\
 ");
 	eat_line();
 	char w = (char)getchar();
 	switch (w) {
-		DO_SORT_FUNCTION('1', "SELECT * FROM students ORDER BY id ASC")
-			DO_SORT_FUNCTION('2', "SELECT * FROM students ORDER BY id DESC")
-			DO_SORT_FUNCTION('3', "SELECT * FROM students ORDER BY name ASC")
-			DO_SORT_FUNCTION('4', "SELECT * FROM students ORDER BY sex ASC")
-			DO_SORT_FUNCTION('5', "SELECT * FROM students ORDER BY birth_time ASC")
-			DO_SORT_FUNCTION('6', "SELECT * FROM students ORDER BY birth_time DESC")
+		DO_SORT_FUNCTION('1', "SELECT * FROM students ORDER BY id ASC");
+		DO_SORT_FUNCTION('2', "SELECT * FROM students ORDER BY id DESC");
+		DO_SORT_FUNCTION('3', "SELECT * FROM students ORDER BY name ASC");
+		DO_SORT_FUNCTION('4', "SELECT * FROM students ORDER BY sex ASC");
+		DO_SORT_FUNCTION('5', "SELECT * FROM students ORDER BY birth_time ASC");
+		DO_SORT_FUNCTION('6', "SELECT * FROM students ORDER BY birth_time DESC");
 	default:
 		break;
 	}
