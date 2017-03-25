@@ -1,4 +1,4 @@
-#pragma once
+ï»¿#pragma once
 #include "stdafx.h"
 #include "output.h"
 #include "types.h"
@@ -32,6 +32,8 @@ void change_color(HANDLE hConsole, int i, WORD p) {
 	case 5:
 		SetConsoleTextAttribute(hConsole, FOREGROUND_BLUE | FOREGROUND_RED | FOREGROUND_INTENSITY);
 		break;
+	default:
+		break;
 	}
 }
 
@@ -43,7 +45,7 @@ void output_by_statement(char *sql) {
 	GetConsoleScreenBufferInfo(hConsole, &consoleInfo);
 	saved_attributes = consoleInfo.wAttributes;
 
-	printf("Ö´ÐÐSQL£º");
+	printf("æ‰§è¡ŒSQLï¼š");
 	SetConsoleTextAttribute(hConsole, FOREGROUND_GREEN | FOREGROUND_RED | FOREGROUND_INTENSITY);
 	printf("%s\n\n", sql);
 	SetConsoleTextAttribute(hConsole, FOREGROUND_RED | FOREGROUND_GREEN | FOREGROUND_BLUE | FOREGROUND_INTENSITY);
@@ -55,29 +57,29 @@ void output_by_statement(char *sql) {
 	{
 		int i;
 		for (i = 0; i < columns; i++) {
-			change_color(hConsole, i, NULL);
+			change_color(hConsole, i, (WORD)NULL);
 			char* display_text = malloc(sizeof(char) * 100);
-			char* column_name = sqlite3_column_name(stmt, i);
-			COMPARE("id", "Ñ§ºÅ")
-			else COMPARE("name", "Ãû×Ö")
-			else COMPARE("sex", "ÐÔ±ð")
-			else COMPARE("birth_time", "ÉúÈÕ")
-			else COMPARE("nation", "¹ú¼Ò")
-			else COMPARE("nationality", "Ãñ×å")
-			else COMPARE("political_status", "ÕþÖÎÃæÃ²")
-			else COMPARE("gov_id", "Éí·ÝÖ¤")
-			else COMPARE("sources", "Àà±ð")
-			else COMPARE("admission_time", "ÈëÑ§Ê±¼ä")
-			else COMPARE("admission_type", "ÈëÑ§Àà±ð")
-			else COMPARE("college", "Ñ§Ôº")
-			else COMPARE("discipline", "×¨Òµ")
-			else COMPARE("grade", "Äê¼¶")
-			else COMPARE("learn_year", "Ñ§ÖÆ")
-			else COMPARE("training_level", "¼Æ»®")
-			else COMPARE("class_number", "°à¼¶")
-			else COMPARE("instructor", "Ö¸µ¼Ô±")
+			const char* column_name = sqlite3_column_name(stmt, i);
+			COMPARE("id", "å­¦å·")
+			else COMPARE("name", "åå­—")
+			else COMPARE("sex", "æ€§åˆ«")
+			else COMPARE("birth_time", "ç”Ÿæ—¥")
+			else COMPARE("nation", "å›½å®¶")
+			else COMPARE("nationality", "æ°‘æ—")
+			else COMPARE("political_status", "æ”¿æ²»é¢è²Œ")
+			else COMPARE("gov_id", "èº«ä»½è¯")
+			else COMPARE("sources", "ç±»åˆ«")
+			else COMPARE("admission_time", "å…¥å­¦æ—¶é—´")
+			else COMPARE("admission_type", "å…¥å­¦ç±»åˆ«")
+			else COMPARE("college", "å­¦é™¢")
+			else COMPARE("discipline", "ä¸“ä¸š")
+			else COMPARE("grade", "å¹´çº§")
+			else COMPARE("learn_year", "å­¦åˆ¶")
+			else COMPARE("training_level", "è®¡åˆ’")
+			else COMPARE("class_number", "ç­çº§")
+			else COMPARE("instructor", "æŒ‡å¯¼å‘˜")
 			else strcpy(display_text, column_name);
-			printf("¡¡¡¡%s¡¡¡¡", display_text);
+			printf("ã€€ã€€%sã€€ã€€", display_text);
 			if (i % 5 == 4) printf("\n");
 			change_color(hConsole, -1, saved_attributes);
 			free(display_text);
@@ -85,7 +87,7 @@ void output_by_statement(char *sql) {
 		printf("\n");
 	}
 	if (stat != SQLITE_DONE && stat != SQLITE_ROW) {
-		printf("SQLÖ´ÐÐ´íÎó£¡\n%s\n", sqlite3_errmsg(db));
+		printf("SQLæ‰§è¡Œé”™è¯¯ï¼\n%s\n", sqlite3_errmsg(db));
 		sqlite3_finalize(stmt);
 	}
 	printf("\n--------------------------------------\n");
@@ -93,11 +95,11 @@ void output_by_statement(char *sql) {
 		int i;
 		
 		for (i = 0; i < columns; i++) {
-			change_color(hConsole, i, NULL);
-			char* name = sqlite3_column_name(stmt, i);
-			printf("¡¡¡¡");
+			change_color(hConsole, i, (WORD)NULL);
+			const char* name = sqlite3_column_name(stmt, i);
+			printf("ã€€ã€€");
 			if (strcmp(name, "sex") == 0) {
-				printf("%s", sqlite3_column_int(stmt, i) == 0 ? "Å®" : "ÄÐ");
+				printf("%s", sqlite3_column_int(stmt, i) == 0 ? "å¥³" : "ç”·");
 			} else if (strcmp(name, "admission_type") == 0) {
 				printf("%s", get_admission(sqlite3_column_int(stmt, i)));
 			} else if (strcmp(name, "nationality") == 0) {
@@ -115,7 +117,7 @@ void output_by_statement(char *sql) {
 			else {
 				printf("%s", sqlite3_column_text(stmt, i));
 			}
-			printf("¡¡¡¡");
+			printf("ã€€ã€€");
 			if (i % 5 == 4) printf("\n");
 			change_color(hConsole, -1, saved_attributes);
 			
@@ -129,13 +131,13 @@ void output_by_statement(char *sql) {
 	sqlite3_finalize(stmt);
 }
 
-void output_student_data() {
+void output_student_data(void) {
 	output_by_statement("SELECT * FROM students");
 }
 
-void output_student_with_sql() {
+void output_student_with_sql(void) {
 	char* sql = malloc(sizeof(char) * 2000);
-	printf("ÇëÊäÈëSQL£º");
+	printf("è¯·è¾“å…¥SQLï¼š");
 	eat_line();
 	gets_s(sql, 2000);
 	output_by_statement(sql);
@@ -145,19 +147,19 @@ void display_delete_menu(void) {
 	char* name = malloc(sizeof(char) * 1000);
 	char* delete_sql = malloc(sizeof(char) * 1000);
 	strcpy(delete_sql, "DELETE FROM students ");
-	printf("É¾³ý·½Ê½Ñ¡Ôñ²Ëµ¥\n\
+	printf("åˆ é™¤æ–¹å¼é€‰æ‹©èœå•\n\
 == == == == == == == == == == == == == == == ==\n\
-1£º °´IDÉ¾³ý\n\
-2 : °´×¨ÒµÃûÉ¾³ý\n\
-q : ²»É¾³ýÍË³ö\n\
+1ï¼š æŒ‰IDåˆ é™¤\n\
+2 : æŒ‰ä¸“ä¸šååˆ é™¤\n\
+q : ä¸åˆ é™¤é€€å‡º\n\
 == == == == == == == == == == == == == == == == \n\
-ÇëÑ¡Ôñ£¨1-8¡¢q£©£º\
+è¯·é€‰æ‹©ï¼ˆ1-8ã€qï¼‰ï¼š\
 ");
 	eat_line();
 	char w = (char)getchar();
 	switch (w) {
 	case '1':
-		printf("ÊäÈë´ýÉ¾³ýID£º");
+		printf("è¾“å…¥å¾…åˆ é™¤IDï¼š");
 		scanf_s("%s", name, 10);
 		strcat(delete_sql, " WHERE id = '");
 		strcat(delete_sql, name);
@@ -165,7 +167,7 @@ q : ²»É¾³ýÍË³ö\n\
 		output_by_statement(delete_sql);
 		break;
 	case '2':
-		printf("ÊäÈë´ýÉ¾³ý×¨Òµ£º");
+		printf("è¾“å…¥å¾…åˆ é™¤ä¸“ä¸šï¼š");
 		scanf_s("%s", name, 10);
 		strcat(delete_sql, " WHERE discipline = '");
 		strcat(delete_sql, name);
@@ -180,28 +182,28 @@ q : ²»É¾³ýÍË³ö\n\
 }
 
 void display_stat(void) {
-	printf("°´¹ú¼ÒÍ³¼Æ£º\n");
-	output_by_statement("SELECT nation, count(id) as ÊýÁ¿ FROM students group by nation");
-	printf("°´Ãñ×åÍ³¼Æ£º\n");
-	output_by_statement("SELECT nationality, count(id) as ÊýÁ¿ FROM students group by nationality");
-	printf("°´×¨Òµ+Äê¼¶+ÐÔ±ðÍ³¼Æ£º\n");
-	output_by_statement("SELECT discipline, grade, sex, count(id) as ÊýÁ¿ FROM students group by discipline, grade, sex");
+	printf("æŒ‰å›½å®¶ç»Ÿè®¡ï¼š\n");
+	output_by_statement("SELECT nation, count(id) as æ•°é‡ FROM students group by nation");
+	printf("æŒ‰æ°‘æ—ç»Ÿè®¡ï¼š\n");
+	output_by_statement("SELECT nationality, count(id) as æ•°é‡ FROM students group by nationality");
+	printf("æŒ‰ä¸“ä¸š+å¹´çº§+æ€§åˆ«ç»Ÿè®¡ï¼š\n");
+	output_by_statement("SELECT discipline, grade, sex, count(id) as æ•°é‡ FROM students group by discipline, grade, sex");
 
 }
 
 
 void display_sort_menu(void) { 
-	printf("ÅÅÐò·½Ê½Ñ¡Ôñ²Ëµ¥\n\
+	printf("æŽ’åºæ–¹å¼é€‰æ‹©èœå•\n\
 == == == == == == == == == == == == == == == ==\n\
-1£º °´Ñ§ºÅ´ÓÐ¡µ½´óÅÅÐò\n\
-2 : °´Ñ§ºÅ´Ó´óµ½Ð¡ÅÅÐò\n\
-3 : °´ÐÕÃûÅÅÐò\n\
-4 : °´ÐÔ±ðÅÅÐò\n\
-5 : °´ÄêÁä´ÓÐ¡µ½´óÅÅÐò\n\
-6 : °´ÄêÁä´Ó´óµ½Ð¡ÅÅÐò\n\
-q : ²»ÅÅÐòÍË³ö\n\
+1ï¼š æŒ‰å­¦å·ä»Žå°åˆ°å¤§æŽ’åº\n\
+2 : æŒ‰å­¦å·ä»Žå¤§åˆ°å°æŽ’åº\n\
+3 : æŒ‰å§“åæŽ’åº\n\
+4 : æŒ‰æ€§åˆ«æŽ’åº\n\
+5 : æŒ‰å¹´é¾„ä»Žå°åˆ°å¤§æŽ’åº\n\
+6 : æŒ‰å¹´é¾„ä»Žå¤§åˆ°å°æŽ’åº\n\
+q : ä¸æŽ’åºé€€å‡º\n\
 == == == == == == == == == == == == == == == == \n\
-ÇëÑ¡Ôñ£¨1-8¡¢q£©£º\
+è¯·é€‰æ‹©ï¼ˆ1-8ã€qï¼‰ï¼š\
 ");
 	eat_line();
 	char w = (char)getchar();

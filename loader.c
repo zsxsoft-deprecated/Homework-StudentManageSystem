@@ -1,5 +1,9 @@
 ﻿#include "stdafx.h"
 #include "loader.h"
+#include "utils.h"
+#include "third-party/cjson/cJSON.h"
+#include "database.h"
+#include "output.h"
 
 #define FREE(s) if (s != NULL) { free(s); s = NULL; }
 
@@ -85,7 +89,7 @@ int check_gov_id(char *gov_id)
 
 // 学号、姓名、性别、国别、出生年月、民族、政治面貌、身份证号、学生类别、入学年月、入学方式、学院、专业、学制、培养层次、年级、班级号、指导员
 
-void load_from_stdin() {
+void load_from_stdin(void) {
 	char* id = malloc(sizeof(char) * 20);
 	char* admission_date = malloc(sizeof(char) * 60);
 	char* gov_id = malloc(sizeof(char) * 20);
@@ -269,13 +273,13 @@ void load_from_stdin() {
 		sqlite3_bind_text(stmt, 1, id, -1, SQLITE_TRANSIENT);
 		sqlite3_bind_text(stmt, 2, name, -1, SQLITE_TRANSIENT);
 		sqlite3_bind_int(stmt, 3, sex);
-		sqlite3_bind_int(stmt, 4, birthday_timestamp);
+		sqlite3_bind_int(stmt, 4, (int)birthday_timestamp);
 		sqlite3_bind_int(stmt, 5, nation);
 		sqlite3_bind_int(stmt, 6, nationality);
 		sqlite3_bind_int(stmt, 7, political_status);
 		sqlite3_bind_text(stmt, 8, gov_id, -1, SQLITE_TRANSIENT);
 		sqlite3_bind_int(stmt, 9, source);
-		sqlite3_bind_int(stmt, 10, admission_timestamp);
+		sqlite3_bind_int(stmt, 10, (int)admission_timestamp);
 		sqlite3_bind_int(stmt, 11, admission);
 		sqlite3_bind_text(stmt, 12, college_from_json, -1, SQLITE_TRANSIENT);
 		sqlite3_bind_text(stmt, 13, discipline_from_json, -1, SQLITE_TRANSIENT);
@@ -311,3 +315,7 @@ void load_from_stdin() {
 	
 }
 
+#undef FREE
+#undef COPY_STRING
+#undef INPUT_AND_DUMP
+#undef SCANF_UTF8

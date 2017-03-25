@@ -12,6 +12,7 @@
     <ClCompile Include="loader.c" />
     <ClCompile Include="utils.c" />
     <ClCompile Include="output.c" />
+    <ClCompile Include="types.c" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="dateHelper.h" />

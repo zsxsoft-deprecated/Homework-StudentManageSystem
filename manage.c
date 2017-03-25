@@ -3,9 +3,10 @@
 #include "types.h"
 #include "loader.h"
 #include "output.h"
+#include "database.h"
 #include <locale.h>
 
-void exit_program() {
+void exit_program(void) {
 	exit(0);
 }
 

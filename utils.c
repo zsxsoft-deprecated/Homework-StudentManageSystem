@@ -22,7 +22,7 @@ int gbk_to_utf8(unsigned char *gbk_str, unsigned char *utf8_str, int utf8_len) {
 	wchar_t * unicode_str = NULL;
 	int ret = 0;
 	if (!gbk_str) return 0;
-	ret = MultiByteToWideChar(CP_ACP, 0, (char *)gbk_str, -1, NULL, NULL);
+	ret = MultiByteToWideChar(CP_ACP, 0, (char *)gbk_str, -1, NULL, (int)NULL);
 	unicode_str = malloc(sizeof(wchar_t) * (ret + 1));
 	ret = MultiByteToWideChar(CP_ACP, 0, (char *)gbk_str, -1, unicode_str, ret);
 	if (!ret) return 0;

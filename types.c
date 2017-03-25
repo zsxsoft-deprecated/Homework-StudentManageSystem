@@ -49,7 +49,6 @@ cJSON* get_college(char* str) {
 
 char* types_read_file(char* json_name) {
 	char *path = malloc(sizeof(char) * 255);
-	int string_size, read_size;
 	
 	strcpy(path, "./data/");
 	strcat(path, json_name);
@@ -82,3 +81,6 @@ void types_destructor() {
 	cJSON_Delete(sources);
 	cJSON_Delete(political_status);
 }
+
+#undef READ_JSON
+#undef EXPORT_FUNCTION
